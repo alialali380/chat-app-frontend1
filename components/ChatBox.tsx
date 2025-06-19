@@ -1,5 +1,6 @@
 import React from 'react';
 
+// تعريف نوع البيانات
 interface Message {
   username: string;
   text?: string;
@@ -13,7 +14,8 @@ interface ChatBoxProps {
   username: string;
 }
 
-export default function ChatBox({ messages, username }: ChatBoxProps) {
+// استخدام React.FC مع النوع المحدد
+const ChatBox: React.FC<ChatBoxProps> = ({ messages, username }) => {
   return (
     <div className="flex-1 p-4 overflow-y-auto space-y-2 bg-gray-50">
       {messages.map((msg, index) => (
@@ -30,12 +32,20 @@ export default function ChatBox({ messages, username }: ChatBoxProps) {
           >
             <strong>{msg.username}</strong>
             {msg.text && <p className="mt-1">{msg.text}</p>}
-            {msg.isImage && msg.mediaUrl && (
-              <img src={msg.mediaUrl} alt="المرفق" className="mt-2 max-h-60 rounded" />
+            {msg.mediaUrl && (
+              <div className="mt-2">
+                {msg.isImage ? (
+                  <img src={msg.mediaUrl} alt="مرفق" className="max-h-60 rounded" />
+                ) : (
+                  <video src={msg.mediaUrl} controls className="max-h-60 rounded" />
+                )}
+              </div>
             )}
           </div>
         </div>
       ))}
     </div>
   );
-}
+};
+
+export default ChatBox;

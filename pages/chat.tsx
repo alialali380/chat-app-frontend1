@@ -17,6 +17,8 @@ export default function ChatPage() {
 
     socket.emit('join_room', { username, room });
 
+    router.push(`/chat?room=${room}&username=${username}`, undefined, { shallow: true });
+
     // استقبال الرسائل السابقة
     socket.on('previous_messages', (msgs) => {
       setMessages(msgs);

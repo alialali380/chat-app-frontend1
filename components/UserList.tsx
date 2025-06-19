@@ -2,6 +2,7 @@ import React from "react";
 
 interface User {
   username: string;
+  connected?: boolean; // ✅ حالة الاتصال
 }
 
 interface Props {
@@ -18,12 +19,14 @@ export default function UserList({ users }: Props) {
     <ul className="space-y-2 p-2 bg-gray-200 rounded">
       {uniqueUsers.map((user, index) => (
         <li key={index} className="text-sm flex items-center">
-          <span className="inline-block w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+          <span
+            className={`inline-block w-2 h-2 rounded-full mr-2 ${
+              user.connected ? "bg-green-500" : "bg-red-500"
+            }`}
+          ></span>
           {user.username}
         </li>
       ))}
     </ul>
   );
 }
-
-

@@ -1,6 +1,7 @@
+// Home.js
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { socket } from '../utils/socket';
+import { FaUser, FaComments, FaSignInAlt } from 'react-icons/fa'; 
 
 export default function Home() {
   const [username, setUsername] = useState('');
@@ -8,35 +9,58 @@ export default function Home() {
   const router = useRouter();
 
   const handleJoin = () => {
-    if (username && room) {
-      // socket.emit('join_room', { username, room });
-      router.push(`/chat?room=${room}&username=${username}`);
+    if (username.trim() && room.trim()) {
+      router.push(`/chat?room=${encodeURIComponent(room)}&username=${encodeURIComponent(username)}`);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
-        <h1 className="text-2xl font-bold mb-4">انضم إلى غرفة</h1>
-        <input
-          type="text"
-          placeholder="اسمك"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          className="w-full p-2 border rounded mb-4"
-        />
-        <input
-          type="text"
-          placeholder="اسم الغرفة"
-          value={room}
-          onChange={(e) => setRoom(e.target.value)}
-          className="w-full p-2 border rounded mb-4"
-        />
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-400 via-white to-blue-100 p-4 transition-all duration-500">
+      <div className="bg-white rounded-xl shadow-2xl p-8 w-full max-w-md transform hover:scale-105 transition-transform duration-300 ease-in-out">
+        <h1 className="text-3xl font-extrabold text-center text-green-600 mb-6">انضم إلى غرفة</h1>
+        
+        <div className="mb-5">
+          <label className="block text-sm font-medium text-gray-700 mb-2">اسمك</label>
+          <div className="relative">
+            <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
+              <FaUser />
+            </span>
+            <input
+              type="text"
+              placeholder="أدخل اسمك"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 transition duration-200"
+            />
+          </div>
+        </div>
+
+        <div className="mb-6">
+          <label className="block text-sm font-medium text-gray-700 mb-2">اسم الغرفة</label>
+          <div className="relative">
+            <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
+              <FaComments />
+            </span>
+            <input
+              type="text"
+              placeholder="مثال: عام"
+              value={room}
+              onChange={(e) => setRoom(e.target.value)}
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 transition duration-200"
+            />
+          </div>
+        </div>
+
         <button
           onClick={handleJoin}
-          className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
+          disabled={!username || !room}
+          className={`w-full flex items-center justify-center gap-2 py-3 px-4 rounded-lg text-white font-semibold text-lg transition-all duration-300 ${
+            username && room
+              ? 'bg-green-500 hover:bg-green-600 transform hover:scale-105'
+              : 'bg-gray-400 cursor-not-allowed'
+          }`}
         >
-          دخول
+          <FaSignInAlt /> دخول إلى الغرفة
         </button>
       </div>
     </div>

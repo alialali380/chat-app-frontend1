@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { FaPaperPlane, FaImage, FaRegTimesCircle } from 'react-icons/fa';
 
 interface Props {
   room: string;
@@ -49,15 +50,16 @@ export default function MessageInput({ room, username, onSend }: Props) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="p-4 border-t bg-white">
+    <form onSubmit={handleSubmit} className="p-4 border-t bg-white shadow-md transition-all duration-300">
       {/* حقل النص والملف */}
-      <div className="flex items-center mb-2">
+      <div className="flex items-center gap-2 mb-3">
         <input
           type="text"
           value={text}
           onChange={(e) => setText(e.target.value)}
           placeholder="اكتب رسالتك..."
-          className="flex-1 p-2 border border-gray-300 rounded-l focus:outline-none focus:ring-2 focus:ring-blue-400"
+          aria-label="اكتب رسالتك هنا"
+          className="flex-1 p-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-green-400 transition duration-200"
         />
         <input
           type="file"
@@ -67,31 +69,37 @@ export default function MessageInput({ room, username, onSend }: Props) {
           id="file-upload"
           onChange={handleFileChange}
         />
-        <label htmlFor="file-upload" className="bg-gray-200 px-3 py-2 cursor-pointer hover:bg-gray-300">
-          📎
+        <label htmlFor="file-upload" className="bg-green-100 text-green-600 p-3 rounded-full cursor-pointer hover:bg-green-200 transition duration-200" aria-label="اختر ملف">
+          <span className="sr-only">اختر صورة أو فيديو</span>
+          <FaImage size={20} />
         </label>
         <button
           type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded-r hover:bg-blue-700 transition-colors"
+          disabled={!text.trim() && !preview}
+          aria-label="إرسال الرسالة"
+          className={`${
+            text.trim() || preview ? 'bg-green-500 hover:bg-green-600' : 'bg-gray-300 cursor-not-allowed'
+          } text-white p-3 rounded-full flex items-center justify-center transition duration-200`}
         >
-          إرسال
+          <FaPaperPlane />
         </button>
       </div>
 
       {/* معاينة الصورة أو الفيديو */}
       {preview && (
-        <div className="relative mt-2 max-w-xs mx-auto">
+        <div className="relative mt-3 max-w-xs mx-auto group">
           {preview.startsWith('data:image') ? (
-            <img src={preview} alt="معاينة" className="max-h-40 rounded shadow" />
+            <img src={preview} alt="معاينة" className="w-full h-auto max-h-60 object-cover rounded-lg shadow-md transition-transform duration-300 group-hover:scale-105" />
           ) : (
-            <video src={preview} controls className="max-h-40 rounded shadow"></video>
+            <video src={preview} controls className="w-full h-auto max-h-60 rounded-lg shadow-md"></video>
           )}
           <button
             type="button"
             onClick={removePreview}
-            className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm"
+            className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-7 h-7 flex items-center justify-center opacity-90 hover:opacity-100 transition-opacity"
+            aria-label="إزالة الملف"
           >
-            &times;
+            <FaRegTimesCircle size={18} />
           </button>
         </div>
       )}
